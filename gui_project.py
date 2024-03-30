@@ -63,7 +63,7 @@ elif selectbox == "Predict New Feedback":
 else:
   st.subheader("Show Evaluation")
   st.write("This is the classification report of Naive Bayes model (BEST model):")
-  st.image('./classification_report_normal_2.png', width=600)
+  st.image('./classification_report_nb.png', width=600)
   st.write("This is the classification report of Logistic Regression model:")
   st.image('./classification_report_lr.png', width=600)
   st.write("This is the classification report of Random Forest model:")
