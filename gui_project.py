@@ -48,9 +48,7 @@ def show_information_dataset():
   st.pyplot(fig)
 
   review_bins_num = new_data['Tier'].value_counts()
-  st.dataframe(review_bins_num)
   review_bins_num = review_bins_num.reset_index()
-  st.dataframe(review_bins_num)
 
   fig1 = plt.figure(figsize=(10, 6))
   ax = sns.barplot(data=review_bins_num, x='Tier', y='count')
