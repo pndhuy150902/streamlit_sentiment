@@ -53,7 +53,7 @@ def show_information_dataset():
   st.dataframe(review_bins_num)
 
   fig1 = plt.figure(figsize=(10, 6))
-  ax = sns.barplot(data=review_bins_num, x='index', y='Tier')
+  ax = sns.barplot(data=review_bins_num, x='Tier', y='count')
   plt.title('Number of reviews according to each group of interest level')
   plt.xlabel('Tier')
   plt.ylabel('Number')
@@ -108,7 +108,7 @@ def show_information_restaurant(id):
     review_bins_num = review_bins_num.reset_index()
 
     fig1 = plt.figure(figsize=(10, 6))
-    ax = sns.barplot(data=review_bins_num, x=review_bins_num.index, y='Tier')
+    ax = sns.barplot(data=review_bins_num, x='Tier', y='count')
     plt.title('Number of reviews according to each group of interest level')
     plt.xlabel('Tier')
     plt.ylabel('Number')
