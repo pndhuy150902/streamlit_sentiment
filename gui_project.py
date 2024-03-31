@@ -77,13 +77,13 @@ elif selectbox == "Predict New Feedback":
             predict_feedback = predict_text(text.strip('\n'))
             list_sentiment.append(predict_feedback)
           list_feedback = pd.DataFrame({'Feedback': list_text_predict, 'Sentiment': list_sentiment})
-          st.dataframe(list_feedback)
+          st.dataframe(list_feedback, width=600)
         else:
           st.warning('File is empty')
       else:
-        data = pd.read_csv(uploaded_file)
-        data['Sentiment'] = data['Comment'].apply(lambda x: predict_text(x))
-        st.write(data)
+        data_feedback_csv = pd.read_csv(uploaded_file)
+        data_feedback_csv['Sentiment'] = data_feedback_csv['Feedback'].apply(lambda x: predict_text(x))
+        st.dataframe(data_feedback_csv, width=600)
 else:
   st.subheader("Show Evaluation")
   st.write("This is the classification report of Naive Bayes model (BEST model):")
