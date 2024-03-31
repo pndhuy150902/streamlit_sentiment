@@ -72,7 +72,9 @@ elif selectbox == "Predict New Feedback":
         text_predict = uploaded_file.read().decode('utf-8')
         list_text_predict = text_predict.split('\n')
         list_sentiment = list()
-        if len(list_text_predict) > 0:
+        if (len(list_text_predict) == 1) and (list_text_predict[0] == ''):
+          st.warning('File is empty')
+        elif len(list_text_predict) > 0:
           for text in list_text_predict:
             predict_feedback = predict_text(text.strip('\n'))
             list_sentiment.append(predict_feedback)
