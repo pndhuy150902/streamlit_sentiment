@@ -55,11 +55,15 @@ if selectbox == "Visualization Dataset":
     st.error('ID Restaurant must be integer', icon="⚠️")
 elif selectbox == "Predict New Feedback":
   st.subheader("Predict New Feedback")
-  text_predict = st.text_area(label="Feeback", placeholder="Enter New Feedback")
-  if (text_predict != "") or (text_predict is None):
-    st.snow()
-    predict_feedback = predict_text(text_predict)
-    st.write(f'Predict Feedback: {predict_feedback}')
+  radio_option = st.radio("Choose your option:", ["Enter your feedback", "Upload file"])
+  if radio_option == "Enter your feedback":
+    pass
+  else:
+    text_predict = st.text_area(label="Feeback", placeholder="Enter New Feedback")
+    if (text_predict != "") or (text_predict is None):
+      st.snow()
+      predict_feedback = predict_text(text_predict)
+      st.write(f'Predict Feedback: {predict_feedback}')
 else:
   st.subheader("Show Evaluation")
   st.write("This is the classification report of Naive Bayes model (BEST model):")
