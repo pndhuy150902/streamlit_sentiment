@@ -95,13 +95,6 @@ def show_information_restaurant(id):
     new_data_negative['Tier']='Negative' 
     new_data = pd.concat([new_data_positive,new_data_negative],axis=0, ignore_index=True)
 
-    fig = plt.figure(figsize=(10, 6))
-    ax = sns.countplot(data=data_full, x='District')
-    plt.title('Distribution of Restaurants by District')
-    plt.xlabel('District')
-    plt.ylabel('Count')
-    st.pyplot(fig)
-
     review_bins_num = new_data['Tier'].value_counts()
     review_bins_num = review_bins_num.reset_index()
 
