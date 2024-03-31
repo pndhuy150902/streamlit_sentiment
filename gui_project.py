@@ -57,13 +57,13 @@ elif selectbox == "Predict New Feedback":
   st.subheader("Predict New Feedback")
   radio_option = st.radio("Choose your option:", ["Enter your feedback", "Upload file"])
   if radio_option == "Enter your feedback":
-    pass
-  else:
     text_predict = st.text_area(label="Feeback", placeholder="Enter New Feedback")
     if (text_predict != "") or (text_predict is None):
       st.snow()
       predict_feedback = predict_text(text_predict)
       st.write(f'Predict Feedback: {predict_feedback}')
+  else:
+    uploaded_file = st.file_uploader("Choose a file", type=['txt', 'csv'])
 else:
   st.subheader("Show Evaluation")
   st.write("This is the classification report of Naive Bayes model (BEST model):")
