@@ -2,6 +2,7 @@ import pickle
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
+from pathlib import Path
 from wordcloud import WordCloud
 data_full = pd.read_csv('./data_full.csv')
 data_tmp = pd.read_csv('./data_tmp.csv')
@@ -66,6 +67,23 @@ elif selectbox == "Predict New Feedback":
       st.write(f'Predict Feedback: {predict_feedback}')
   else:
     uploaded_file = st.file_uploader("Choose a file", type=['txt', 'csv'])
+    if uploaded_file is not None:
+      if Path(uploaded_file.name).suffix == '.txt':
+        text_predict = uploaded_file.read().decode('utf-8')
+        list_text_predict = text_predict.split('\n')
+        list_sentiment = list()
+        if len(list_text_predict) > 0:
+          for text in list_text_predict:
+            predict_feedback = predict_text(text.strip('\n'))
+            list_sentiment.append(predict_feedback)
+          list_feedback = pd.DataFrame({'Feedback': list_text_predict, 'Sentiment': list_sentiment})
+          st.dataframe(list_feedback)
+        else:
+          st.warning('File is empty')
+      else:
+        data = pd.read_csv(uploaded_file)
+        data['Sentiment'] = data['Comment'].apply(lambda x: predict_text(x))
+        st.write(data)
 else:
   st.subheader("Show Evaluation")
   st.write("This is the classification report of Naive Bayes model (BEST model):")
