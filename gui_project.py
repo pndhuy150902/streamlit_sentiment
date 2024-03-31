@@ -82,8 +82,11 @@ elif selectbox == "Predict New Feedback":
           st.warning('File is empty')
       else:
         data_feedback_csv = pd.read_csv(uploaded_file)
-        data_feedback_csv['Sentiment'] = data_feedback_csv['Feedback'].apply(lambda x: predict_text(x))
-        st.dataframe(data_feedback_csv, width=600)
+        try:
+          data_feedback_csv['Sentiment'] = data_feedback_csv['Feedback'].apply(lambda x: predict_text(x))
+          st.dataframe(data_feedback_csv, width=600)
+        except:
+          st.warning('File not found or format file is not correct', icon="⚠️")
 else:
   st.subheader("Show Evaluation")
   st.write("This is the classification report of Naive Bayes model (BEST model):")
