@@ -33,9 +33,9 @@ def show_information_dataset():
   new_data_negative['Tier']='Negative' 
   new_data = pd.concat([new_data_positive,new_data_negative],axis=0, ignore_index=True)
 
-  n_restauran = new_data['IDRestaurant'].nunique()
+  n_restaurant = new_data['IDRestaurant'].nunique()
   st.write(f'Total Vote: {new_data.shape[0]}')
-  st.write(f'Total Restaurant: {n_restauran}')
+  st.write(f'Total Restaurant: {n_restaurant}')
   st.write(f'Vote Positive: {vote_positive}')
   st.write(f'Vote Negative: {vote_negative}')
   st.write(f'Average Rating: {round(data_full["Rating"].mean(), 1)}')
@@ -105,7 +105,6 @@ def show_information_restaurant(id):
     st.pyplot(fig)
 
     review_bins_num = new_data['Tier'].value_counts()
-    review_bins_num.sort_values('index', inplace = True)
     review_bins_num = review_bins_num.reset_index()
 
     fig1 = plt.figure(figsize=(10, 6))
