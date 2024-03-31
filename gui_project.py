@@ -4,6 +4,9 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from pathlib import Path
 from wordcloud import WordCloud
+import seaborn as sns
+
+
 data_full = pd.read_csv('./data_full.csv')
 data_tmp = pd.read_csv('./data_tmp.csv')
 stopwords = list()
@@ -18,12 +21,70 @@ with open('./tfidf_normal.pkl', 'rb') as f:
   tfidf_normal = pickle.load(f)
 def predict_text(text):
   return label_encoder_normal.inverse_transform(model_normal_2.predict(tfidf_normal.transform([text])))[0]
+def show_information_dataset():
+
+
+  vote_positive = data_full[data_full["Rating"] > 7.8].shape[0] + data_tmp[data_tmp['Sentiment'] == 'Positive'].shape[0]
+  vote_negative = data_full[data_full["Rating"] < 6.8].shape[0] + data_tmp[data_tmp['Sentiment'] == 'Negative'].shape[0]
+  new_data_positive = pd.concat([data_full[data_full["Rating"] > 7.8], data_tmp[data_tmp['Sentiment'] == 'Positive']], axis=0, ignore_index=True)
+  new_data_negative = pd.concat([data_full[data_full["Rating"] < 6.8], data_tmp[data_tmp['Sentiment'] == 'Negative']], axis=0, ignore_index=True)
+
+  new_data_positive['Tier']='Positive'
+  new_data_negative['Tier']='Negative' 
+  new_data = pd.concat([new_data_positive,new_data_negative],axis=0, ignore_index=True)
+
+  n_restauran = new_data['IDRestaurant'].nunique()
+  st.write(f'Total Vote: {new_data.shape[0]}')
+  st.write(f'Total Restaurant: {n_restauran}')
+  st.write(f'Vote Positive: {vote_positive}')
+  st.write(f'Vote Negative: {vote_negative}')
+  st.write(f'Average Rating: {round(data_full["Rating"].mean(), 1)}')
+
+  fig = plt.figure(figsize=(10, 6))
+  ax = sns.countplot(data=data_full, x='District')
+  plt.title('Distribution of Restaurants by District')
+  plt.xlabel('District')
+  plt.ylabel('Count')
+  st.pyplot(fig)
+
+  review_bins_num = new_data['Tier'].value_counts()
+  review_bins_num.sort_values('index', inplace = True)
+  review_bins_num = review_bins_num.reset_index()
+
+  fig1 = plt.figure(figsize=(10, 6))
+  ax = sns.barplot(data=review_bins_num, x='index', y='Tier')
+  plt.title('Number of reviews according to each group of interest level')
+  plt.xlabel('Tier')
+  plt.ylabel('Number')
+  st.pyplot(fig1)
+
+  review_bins = new_data['Tier'].value_counts(normalize=True)*100
+  review_bins.sort_values('index', inplace = True)
+  fig2 = plt.figure(figsize = (15,8))
+  plt.pie(x=review_bins, labels=review_bins.index, autopct='%1.1f%%')
+  plt.legend(title = "Group:")
+  plt.title('Number of reviews according to each group')
+  st.pyplot(fig2)
+    
+  
+  if vote_positive > 0:
+    st.write('WordCloud Positive:')
+    wordcloud = WordCloud(background_color='white', stopwords=stopwords, max_words=30).generate(' '.join(new_data_positive['Comment'].tolist()))
+    st.image(wordcloud.to_array(), width=600)
+  if vote_negative > 0:
+    st.write('WordCloud Negative:')
+    wordcloud = WordCloud(background_color='white', stopwords=stopwords, max_words=30).generate(' '.join(new_data_negative['Comment'].tolist()))
+    st.image(wordcloud.to_array(), width=600)                               
 def show_information_restaurant(id):
   try:
     data_check = data_full[data_full['IDRestaurant'] == id]
     st.write(f'Name Restaurant: {data_check.iloc[0]["Restaurant"]}')
     st.write(f'Address Restaurant: {data_check.iloc[0]["Address"]}')
+    st.write(f'Time: : {data_check.iloc[0]["Time_x"]}')
+    st.write(f'Price: : {data_check.iloc[0]["Price"]}')
+    st.write(f'District: : {data_check.iloc[0]["District"]}')
     st.write(f'Total Vote: {data_check.shape[0]}')
+
     vote_positive = data_check[data_check["Rating"] > 7.8].shape[0] + data_tmp[((data_tmp['Sentiment'] == 'Positive') & (data_tmp['IDRestaurant'] == id))].shape[0]
     vote_negative = data_check[data_check["Rating"] < 6.8].shape[0] + data_tmp[((data_tmp['Sentiment'] == 'Negative') & (data_tmp['IDRestaurant'] == id))].shape[0]
     st.write(f'Vote Positive: {vote_positive}')
@@ -31,6 +92,37 @@ def show_information_restaurant(id):
     st.write(f'Average Rating: {round(data_check["Rating"].mean(), 1)}')
     new_data_positive = pd.concat([data_check[data_check["Rating"] > 7.8], data_tmp[((data_tmp['Sentiment'] == 'Positive') & (data_tmp['IDRestaurant'] == id))]], axis=0, ignore_index=True)
     new_data_negative = pd.concat([data_check[data_check["Rating"] < 6.8], data_tmp[((data_tmp['Sentiment'] == 'Negative') & (data_tmp['IDRestaurant'] == id))]], axis=0, ignore_index=True)
+    
+    new_data_positive['Tier']='Positive'
+    new_data_negative['Tier']='Negative' 
+    new_data = pd.concat([new_data_positive,new_data_negative],axis=0, ignore_index=True)
+
+    fig = plt.figure(figsize=(10, 6))
+    ax = sns.countplot(data=data_full, x='District')
+    plt.title('Distribution of Restaurants by District')
+    plt.xlabel('District')
+    plt.ylabel('Count')
+    st.pyplot(fig)
+
+    review_bins_num = new_data['Tier'].value_counts()
+    review_bins_num.sort_values('index', inplace = True)
+    review_bins_num = review_bins_num.reset_index()
+
+    fig1 = plt.figure(figsize=(10, 6))
+    ax = sns.barplot(data=review_bins_num, x='index', y='Tier')
+    plt.title('Number of reviews according to each group of interest level')
+    plt.xlabel('Tier')
+    plt.ylabel('Number')
+    st.pyplot(fig1)
+
+    review_bins = new_data['Tier'].value_counts(normalize=True)*100
+    review_bins.sort_values('index', inplace = True)
+    fig2 = plt.figure(figsize = (15,8))
+    plt.pie(x=review_bins, labels=review_bins.index, autopct='%1.1f%%')
+    plt.legend(title = "Group:")
+    plt.title('Number of reviews according to each group')
+    st.pyplot(fig2)
+
     if vote_positive > 0:
       st.write('WordCloud Positive:')
       wordcloud = WordCloud(background_color='white', stopwords=stopwords, max_words=30).generate(' '.join(new_data_positive['Comment'].tolist()))
@@ -45,8 +137,26 @@ def show_information_restaurant(id):
 st.set_page_config(page_title="Sentiment Analysis Application", page_icon="🧊", layout="wide", initial_sidebar_state="expanded")
 st.title("Sentiment Analysis")
 st.sidebar.title("Options in application Sentiment Analysis")
-selectbox = st.sidebar.selectbox("Projects", ["Visualization Dataset", "Predict New Feedback", "Show Evaluation"])
-if selectbox == "Visualization Dataset":
+
+selectbox = st.sidebar.selectbox("Projects", ["Home","Overview Dataset", "Visualization Dataset", "Predict New Feedback", "Show Evaluation"])
+if selectbox == "Home":
+  st.title("Trung Tâm Tin Học")
+  st.write("## Capstone Project - Đồ án tốt nghiệp Data Science")
+
+  st.header('Requirement')
+  st.write("""
+  ##### Xây dựng hệ thống Sentiment Analysis.
+  """)
+  st.write("""Sử dụng Machine Learning, Xây dựng hệ thống hỗ trợ nhà hàng/quán
+ ăn phân loại các phản hồi của khách hàng """)
+
+  st.write("Nhóm thực hiện:")
+  st.write("- Phạm Lê Phú")
+  st.write("- Phạm Nguyễn Đức Huy")
+elif selectbox == "Overview Dataset":
+  st.header('Overview Dataset')
+  show_information_dataset()
+elif selectbox == "Visualization Dataset":
   st.subheader("Visualization Dataset")
   id_restaurant = st.number_input(label="ID Restaurant", placeholder="Enter ID Restaurant", step=1)
   if isinstance(id_restaurant, int):
