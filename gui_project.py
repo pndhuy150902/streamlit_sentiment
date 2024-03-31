@@ -28,13 +28,15 @@ def show_information_restaurant(id):
     st.write(f'Vote Positive: {vote_positive}')
     st.write(f'Vote Negative: {vote_negative}')
     st.write(f'Average Rating: {round(data_check["Rating"].mean(), 1)}')
+    new_data_positive = pd.concat([data_check[data_check["Rating"] > 7.8], data_tmp[((data_tmp['Sentiment'] == 'Positive') & (data_tmp['IDRestaurant'] == id))]], axis=0, ignore_index=True)
+    new_data_negative = pd.concat([data_check[data_check["Rating"] < 6.8], data_tmp[((data_tmp['Sentiment'] == 'Negative') & (data_tmp['IDRestaurant'] == id))]], axis=0, ignore_index=True)
     if vote_positive > 0:
       st.write('WordCloud Positive:')
-      wordcloud = WordCloud(background_color='white', stopwords=stopwords, max_words=30).generate(' '.join(data_check[data_check["Rating"] > 7.0]['Comment'].tolist()))
+      wordcloud = WordCloud(background_color='white', stopwords=stopwords, max_words=30).generate(' '.join(new_data_positive['Comment'].tolist()))
       st.image(wordcloud.to_array(), width=600)
     if vote_negative > 0:
       st.write('WordCloud Negative:')
-      wordcloud = WordCloud(background_color='white', stopwords=stopwords, max_words=30).generate(' '.join(data_check[data_check["Rating"] <= 7.0]['Comment'].tolist()))
+      wordcloud = WordCloud(background_color='white', stopwords=stopwords, max_words=30).generate(' '.join(new_data_negative['Comment'].tolist()))
       st.image(wordcloud.to_array(), width=600)
   except:
     st.write(f'ID Restaurant: {id} not found')
