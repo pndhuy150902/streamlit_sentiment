@@ -6,6 +6,44 @@ from pathlib import Path
 from wordcloud import WordCloud
 import seaborn as sns
 
+positive_words = [
+    "thích", "tốt", "xuất sắc", "tuyệt vời", "tuyệt hảo", "đẹp", "ổn", "ngon",
+    "hài lòng", "ưng ý", "hoàn hảo", "chất lượng", "thú vị", "nhanh",
+    "tiện lợi", "dễ sử dụng", "hiệu quả", "ấn tượng",
+    "nổi bật", "tận hưởng", "tốn ít thời gian", "thân thiện", "hấp dẫn",
+    "gợi cảm", "tươi mới", "lạ mắt", "cao cấp", "độc đáo",
+    "hợp khẩu vị", "rất tốt", "rất thích", "tận tâm", "đáng tin cậy", "đẳng cấp",
+    "hấp dẫn", "an tâm", "không thể cưỡng lại", "thỏa mãn", "thúc đẩy",
+    "cảm động", "phục vụ tốt", "làm hài lòng", "gây ấn tượng", "nổi trội",
+    "sáng tạo", "quý báu", "phù hợp", "tận tâm",
+    "hiếm có", "cải thiện", "hoà nhã", "chăm chỉ", "cẩn thận",
+    "vui vẻ", "sáng sủa", "hào hứng", "đam mê", "vừa vặn", "đáng tiền"
+ ]
+
+negative_words = [
+    "kém", "tệ", "đau", "xấu", "dở", "ức",
+    "buồn", "rối", "thô", "lâu", "chán"
+    "tối", "chán", "ít", "mờ", "mỏng",
+    "lỏng lẻo", "khó", "cùi", "yếu",
+    "kém chất lượng", "không thích", "không thú vị", "không ổn",
+    "không hợp", "không đáng tin cậy", "không chuyên nghiệp",
+    "không phản hồi", "không an toàn", "không phù hợp", "không thân thiện", "không linh hoạt", "không đáng giá",
+    "không ấn tượng", "không tốt", "chậm", "khó khăn", "phức tạp",
+    "khó hiểu", "khó chịu", "gây khó dễ", "rườm rà", "khó truy cập",
+    "thất bại", "tồi tệ", "khó xử", "không thể chấp nhận", "tồi tệ","không rõ ràng",
+    "không chắc chắn", "rối rắm", "không tiện lợi", "không đáng tiền", "chưa đẹp", "không đẹp"
+ ]
+
+def find_words(document, list_of_words):
+    document_lower = document.lower()
+    word_count = 0
+    word_list = []
+    for word in list_of_words:
+        if word in document_lower:
+            #print(word)
+            word_count += document_lower.count(word)
+            word_list.append(word)
+    return word_count, word_list
 
 data_full = pd.read_csv('./data_full.csv')
 data_tmp = pd.read_csv('./data_tmp.csv')
@@ -78,11 +116,11 @@ def show_information_restaurant(id):
     data_check = data_full[data_full['IDRestaurant'] == id]
     st.write(f'Name Restaurant: {data_check.iloc[0]["Restaurant"]}')
     st.write(f'Address Restaurant: {data_check.iloc[0]["Address"]}')
-    st.write(f'Time: : {data_check.iloc[0]["Time_x"]}')
-    st.write(f'Price: : {data_check.iloc[0]["Price"]}')
-    st.write(f'District: : {data_check.iloc[0]["District"]}')
+    st.write(f'Time: {data_check.iloc[0]["Time_x"]}')
+    st.write(f'Price: {data_check.iloc[0]["Price"]}')
+    st.write(f'District: {data_check.iloc[0]["District"]}')
     st.write(f'Total Vote: {data_check.shape[0]}')
-
+    
     vote_positive = data_check[data_check["Rating"] > 7.8].shape[0] + data_tmp[((data_tmp['Sentiment'] == 'Positive') & (data_tmp['IDRestaurant'] == id))].shape[0]
     vote_negative = data_check[data_check["Rating"] < 6.8].shape[0] + data_tmp[((data_tmp['Sentiment'] == 'Negative') & (data_tmp['IDRestaurant'] == id))].shape[0]
     st.write(f'Vote Positive: {vote_positive}')
@@ -94,6 +132,25 @@ def show_information_restaurant(id):
     new_data_positive['Tier']='Positive'
     new_data_negative['Tier']='Negative' 
     new_data = pd.concat([new_data_positive,new_data_negative],axis=0, ignore_index=True)
+
+    document = ''
+    for Comment in new_data['Comment']:
+        document = document + ' ' + Comment
+    positive_count, positive_word_list = find_words(document, positive_words)
+    st.write("Number of positive words:", positive_count)
+    st.write("List of positive words:")
+    s = ''
+    for i in positive_word_list:
+      s += "- " + i + "\n"
+    st.markdown(s)
+
+    negative_count, negative_word_list = find_words(document, negative_words)
+    st.write("Number of negative words:", negative_count)
+    st.write("List of negative words:")
+    s = ''
+    for i in negative_word_list:
+      s += "- " + i + "\n"
+    st.markdown(s)
 
     review_bins_num = new_data['Tier'].value_counts()
     review_bins_num = review_bins_num.reset_index()
