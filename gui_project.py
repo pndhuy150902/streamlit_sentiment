@@ -105,7 +105,7 @@ def show_information_dataset():
   
   if vote_positive > 0:
     st.write('WordCloud Positive:')
-    wordcloud = WordCloud(background_color='white', stopwords=stopwords, max_words=30).generate(' '.join(new_data_positive['Comment'].tolist()))
+    wordcloud = WordCloud(background_color='white', stopwords=stopwords+['không'], max_words=30).generate(' '.join(new_data_positive['Comment'].tolist()))
     st.image(wordcloud.to_array(), width=600)
   if vote_negative > 0:
     st.write('WordCloud Negative:')
