@@ -20,7 +20,7 @@ positive_words = [
 ]
 
 negative_words = [
-  "kém", "tệ", "xấu", "dở", "ức",
+  "kém", "tệ", "xấu", "dở",
   "buồn", "rối", "lâu", "chán"
   "tối", "ít", "mờ", "mỏng",
   "lỏng lẻo", "khó", "cùi",
@@ -221,7 +221,6 @@ elif selectbox == "Predict New Feedback":
   if radio_option == "Enter your feedback":
     text_predict = st.text_area(label="Feeback", placeholder="Enter New Feedback")
     if (text_predict != "") or (text_predict is None):
-      st.snow()
       predict_feedback = predict_text(text_predict)
       st.write(f'Predict Feedback: {predict_feedback}')
   else:
