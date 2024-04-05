@@ -85,16 +85,18 @@ def show_information_dataset():
   st.pyplot(fig)
 
   review_bins_num = new_data['Tier'].value_counts()
+  review_bins_num.sort_values('index', inplace = True)
   review_bins_num = review_bins_num.reset_index()
 
   fig1 = plt.figure(figsize=(10, 6))
-  ax = sns.barplot(data=review_bins_num, x='Tier', y='count')
+  ax = sns.barplot(data=review_bins_num, x='index', y='Tier')
   plt.title('Number of reviews according to each group of interest level')
   plt.xlabel('Tier')
   plt.ylabel('Number')
   st.pyplot(fig1)
 
   review_bins = new_data['Tier'].value_counts(normalize=True)*100
+  review_bins.sort_values('index', inplace = True)
   fig2 = plt.figure(figsize = (15,8))
   plt.pie(x=review_bins, labels=review_bins.index, autopct='%1.1f%%')
   plt.legend(title = "Group:")
@@ -152,16 +154,18 @@ def show_information_restaurant(id):
     st.markdown(s)
 
     review_bins_num = new_data['Tier'].value_counts()
+    review_bins_num.sort_values('index', inplace = True)
     review_bins_num = review_bins_num.reset_index()
 
     fig1 = plt.figure(figsize=(10, 6))
-    ax = sns.barplot(data=review_bins_num, x='Tier', y='count')
+    ax = sns.barplot(data=review_bins_num, x='index', y='Tier')
     plt.title('Number of reviews according to each group of interest level')
     plt.xlabel('Tier')
     plt.ylabel('Number')
     st.pyplot(fig1)
 
     review_bins = new_data['Tier'].value_counts(normalize=True)*100
+    review_bins.sort_values('index', inplace = True)
     fig2 = plt.figure(figsize = (15,8))
     plt.pie(x=review_bins, labels=review_bins.index, autopct='%1.1f%%')
     plt.legend(title = "Group:")
