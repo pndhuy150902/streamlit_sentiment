@@ -7,32 +7,31 @@ from wordcloud import WordCloud
 import seaborn as sns
 
 positive_words = [
-    "thích", "tốt", "xuất sắc", "tuyệt vời", "tuyệt hảo", "đẹp", "ổn", "ngon",
-    "hài lòng", "ưng ý", "hoàn hảo", "chất lượng", "thú vị", "nhanh",
-    "tiện lợi", "dễ sử dụng", "hiệu quả", "ấn tượng",
-    "nổi bật", "tận hưởng", "tốn ít thời gian", "thân thiện", "hấp dẫn",
-    "gợi cảm", "tươi mới", "lạ mắt", "cao cấp", "độc đáo",
-    "hợp khẩu vị", "rất tốt", "rất thích", "tận tâm", "đáng tin cậy", "đẳng cấp",
-    "hấp dẫn", "an tâm", "không thể cưỡng lại", "thỏa mãn", "thúc đẩy",
-    "cảm động", "phục vụ tốt", "làm hài lòng", "gây ấn tượng", "nổi trội",
-    "sáng tạo", "quý báu", "phù hợp", "tận tâm",
-    "hiếm có", "cải thiện", "hoà nhã", "chăm chỉ", "cẩn thận",
-    "vui vẻ", "sáng sủa", "hào hứng", "đam mê", "vừa vặn", "đáng tiền"
- ]
+  "thích", "tốt", "xuất sắc", "tuyệt vời", "tuyệt hảo", "đẹp", "ổn", "ngon",
+  "hài lòng", "ưng ý", "hoàn hảo", "chất lượng", "thú vị", "nhanh",
+  "tiện lợi", "hiệu quả", "ấn tượng",
+  "nổi bật", "tận hưởng", "tốn ít thời gian", "thân thiện", "hấp dẫn", "cao cấp", "độc đáo",
+  "hợp khẩu vị", "rất tốt", "rất thích", "tận tâm", "đáng tin cậy", "đẳng cấp",
+  "hấp dẫn", "an tâm", "không thể cưỡng lại", "thỏa mãn",
+  "cảm động", "phục vụ tốt", "làm hài lòng", "gây ấn tượng", "nổi trội",
+  "sáng tạo", "quý báu", "phù hợp", "tận tâm",
+  "hiếm có", "cải thiện", "hoà nhã", "chăm chỉ", "cẩn thận",
+  "vui vẻ", "sáng sủa", "đáng tiền"
+]
 
 negative_words = [
-    "kém", "tệ", "đau", "xấu", "dở", "ức",
-    "buồn", "rối", "thô", "lâu", "chán"
-    "tối", "chán", "ít", "mờ", "mỏng",
-    "lỏng lẻo", "khó", "cùi", "yếu",
-    "kém chất lượng", "không thích", "không thú vị", "không ổn",
-    "không hợp", "không đáng tin cậy", "không chuyên nghiệp",
-    "không phản hồi", "không an toàn", "không phù hợp", "không thân thiện", "không linh hoạt", "không đáng giá",
-    "không ấn tượng", "không tốt", "chậm", "khó khăn", "phức tạp",
-    "khó hiểu", "khó chịu", "gây khó dễ", "rườm rà", "khó truy cập",
-    "thất bại", "tồi tệ", "khó xử", "không thể chấp nhận", "tồi tệ","không rõ ràng",
-    "không chắc chắn", "rối rắm", "không tiện lợi", "không đáng tiền", "chưa đẹp", "không đẹp"
- ]
+  "kém", "tệ", "xấu", "dở", "ức",
+  "buồn", "rối", "lâu", "chán"
+  "tối", "ít", "mờ", "mỏng",
+  "lỏng lẻo", "khó", "cùi",
+  "kém chất lượng", "không thích", "không ổn",
+  "không hợp", "không hợp khẩu vị",
+  "không phản hồi", "không an toàn", "không phù hợp", "không thân thiện", "không linh hoạt", "không đáng giá",
+  "không ấn tượng", "không tốt", "chậm", "khó khăn", "phức tạp",
+  "khó hiểu", "khó chịu", "gây khó dễ", "rườm rà", "khó truy cập",
+  "thất bại", "tồi tệ", "khó xử", "không thể chấp nhận", "tồi tệ","không rõ ràng",
+  "không chắc chắn", "rối rắm", "không tiện lợi", "không đáng tiền", "chưa đẹp", "không đẹp"
+]
 
 def find_words(document, list_of_words):
     document_lower = document.lower()
